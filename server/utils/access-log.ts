@@ -103,6 +103,7 @@ export function useAccessLog(event: H3Event) {
     })
   }
   else {
+    console.log('尝试打印accessLogs:', accessLogs)
     console.log('access logs:', logs2blobs(accessLogs), blobs2logs(logs2blobs(accessLogs)))
     // 发送日志到自定义 Gin 接口
     sendLogsToGinAPI(accessLogs).catch(error => {
@@ -115,7 +116,7 @@ export function useAccessLog(event: H3Event) {
 async function sendLogsToGinAPI(logs: LogsMap) {
   try {
     // 替换为您的 Gin API 地址
-    const apiUrl = 'http://your-gin-api-address/api/bitly'
+    const apiUrl = 'https://infra-webhook.lfszo.codefriend.top/get'
     
     const response = await fetch(apiUrl, {
       method: 'POST',
