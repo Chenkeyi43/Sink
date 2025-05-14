@@ -98,16 +98,13 @@ export function useAccessLog(event: H3Event) {
 
   if (process.env.NODE_ENV === 'production') {
     console.log('尝试打印accessLogs:', accessLogs)
-    console.log('再次尝试打印accessLogs2:', accessLogs,'再次尝试打印accessLogs2 结束')
+
     
     // 发送日志到自定义 Gin 接口
     sendLogsToGinAPI()
-      .then(response => {
-        console.log('发送日志到 Gin API 成功:', response)
-      })
-      .catch(error => {
-        console.error('发送日志到 Gin API 失败:', error)
-      })
+    console.log('调用sendLogsToGinAPI 结束:')
+
+    // 发送日志到 Hub Analytics
     
     return hubAnalytics().put({
       indexes: [link.id], // only one index
@@ -122,21 +119,15 @@ export function useAccessLog(event: H3Event) {
 
 // 添加发送日志到 Gin 接口的函数
 async function sendLogsToGinAPI() {
-  try {
+
     const apiUrl = 'https://infra-webhook.lfszo.codefriend.top/ping'
     
     console.log('开始发送 ping 请求...')
     
-    const response = await $fetch(`${apiUrl}`, {
-      method: 'GET',
+    return $fetch(`${apiUrl}`, {
+      method: 'POST',
       retry: 1,
       retryDelay: 100, // ms
     })
     
-    console.log('Ping 响应:', response)
-    return response
-  } catch (error) {
-    console.error('Ping 请求失败:', error)
-    throw error // 重新抛出错误以便外层捕获
-  }
 }
