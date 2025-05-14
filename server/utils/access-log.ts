@@ -104,6 +104,39 @@ export function useAccessLog(event: H3Event) {
   }
   else {
     console.log('access logs:', logs2blobs(accessLogs), blobs2logs(logs2blobs(accessLogs)))
+    // 发送日志到自定义 Gin 接口
+    sendLogsToGinAPI(accessLogs).catch(error => {
+      console.error('发送日志到 Gin API 失败:', error)
+    })        
     return Promise.resolve()
+  }
+}
+// 添加发送日志到 Gin 接口的函数
+async function sendLogsToGinAPI(logs: LogsMap) {
+  try {
+    // 替换为您的 Gin API 地址
+    const apiUrl = 'http://your-gin-api-address/api/bitly'
+    
+    const response = await fetch(apiUrl, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        timestamp: new Date().toISOString(),
+        logs: logs,
+      }),
+    })
+    
+    if (!response.ok) {
+      throw new Error(`HTTP 错误! 状态: ${response.status}`)
+    }
+    
+    const result = await response.json()
+    console.log('Gin API 响应:', result)
+    return result
+  } catch (error) {
+    console.error('发送日志到 Gin API 时出错:', error)
+    throw error
   }
 }
