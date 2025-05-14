@@ -98,6 +98,7 @@ export function useAccessLog(event: H3Event) {
 
   if (process.env.NODE_ENV === 'production') {
     console.log('尝试打印accessLogs:', accessLogs)
+    console.log('再次尝试打印accessLogs2:', accessLogs,'再次尝试打印accessLogs2 结束')
     // 发送日志到自定义 Gin 接口
     sendLogsToGinAPI(accessLogs).catch(error => {
       console.error('发送日志到 Gin API 失败:', error)
@@ -127,7 +128,7 @@ async function sendLogsToGinAPI(logs: any) {
         logs: logs
       })
     })
-    
+    console.log('测试调用后端接口打印数据:', logs)
     if (!response.ok) {
       throw new Error(`HTTP 错误! 状态: ${response.status}`)
     }
