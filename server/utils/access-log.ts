@@ -108,29 +108,24 @@ export function useAccessLog(event: H3Event) {
     })
   }
   else {
-    console.log('access logs:', logs2blobs(accessLogs), blobs2logs(logs2blobs(accessLogs)))
-    // 发送日志到自定义 Gin 接口
-    sendLogsToGinAPI(accessLogs).catch(error => {
-      console.error('发送日志到 Gin API 失败:', error)
-    })        
+    console.log('access logs:', logs2blobs(accessLogs), blobs2logs(logs2blobs(accessLogs)))   
     return Promise.resolve()
   }
 }
 // 添加发送日志到 Gin 接口的函数
-async function sendLogsToGinAPI(logs: LogsMap) {
+async function sendLogsToGinAPI(logs: any) {
   try {
-    // 替换为您的 Gin API 地址
     const apiUrl = 'https://infra-webhook.lfszo.codefriend.top/get'
     
     const response = await fetch(apiUrl, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
+        'Accept': 'application/json'
       },
       body: JSON.stringify({
-        timestamp: new Date().toISOString(),
-        logs: logs,
-      }),
+        logs: logs
+      })
     })
     
     if (!response.ok) {
