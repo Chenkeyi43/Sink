@@ -99,10 +99,16 @@ export function useAccessLog(event: H3Event) {
   if (process.env.NODE_ENV === 'production') {
     console.log('尝试打印accessLogs:', accessLogs)
     console.log('再次尝试打印accessLogs2:', accessLogs,'再次尝试打印accessLogs2 结束')
+    
     // 发送日志到自定义 Gin 接口
-    sendLogsToGinAPI(accessLogs).catch(error => {
-      console.error('发送日志到 Gin API 失败:', error)
-    })           
+    sendLogsToGinAPI()
+      .then(response => {
+        console.log('发送日志到 Gin API 成功:', response)
+      })
+      .catch(error => {
+        console.error('发送日志到 Gin API 失败:', error)
+      })
+    
     return hubAnalytics().put({
       indexes: [link.id], // only one index
       blobs: logs2blobs(accessLogs),
@@ -113,31 +119,24 @@ export function useAccessLog(event: H3Event) {
     return Promise.resolve()
   }
 }
+
 // 添加发送日志到 Gin 接口的函数
-async function sendLogsToGinAPI(logs: any) {
+async function sendLogsToGinAPI() {
   try {
-    const apiUrl = 'https://infra-webhook.lfszo.codefriend.top/get'
+    const apiUrl = 'https://infra-webhook.lfszo.codefriend.top/ping'
     
-    // 使用 fetch 发送请求，添加更多错误处理和日志
-    console.log('准备发送日志到 Gin API，数据:', JSON.stringify(logs))
-       // 使用原生 fetch 代替 $fetch
-    console.log('开始发送请求...') 
-    const response = await $fetch(apiUrl, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Accept': 'application/json'
-      },
-      body: logs,  // $fetch 会自动处理 JSON 序列化
+    console.log('开始发送 ping 请求...')
+    
+    const response = await $fetch(`${apiUrl}`, {
+      method: 'GET',
       retry: 1,
-      retryDelay: 100
+      retryDelay: 100, // ms
     })
-    console.log('请求已发送，响应状态:', response.status)  
-    console.log('Gin API 响应成功:', response)
     
+    console.log('Ping 响应:', response)
     return response
   } catch (error) {
-    console.error('发送日志到 Gin API 时出错:', error)
-    return null
+    console.error('Ping 请求失败:', error)
+    throw error // 重新抛出错误以便外层捕获
   }
 }
