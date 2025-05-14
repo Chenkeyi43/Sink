@@ -30,6 +30,7 @@ export default eventHandler(async (event) => {
 
     if (link) {
       event.context.link = link
+      console.log('event',event)
       try {
         await useAccessLog(event)
       }
