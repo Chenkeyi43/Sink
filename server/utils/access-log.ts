@@ -99,22 +99,19 @@ export function useAccessLog(event: H3Event) {
   if (process.env.NODE_ENV === 'production') {
     console.log('尝试打印accessLogs:', accessLogs);
 
-    try {
-      // 使用 Nuxt 的 $fetch 替代原生 fetch
-      const response = await $fetch('https://infra-webhook.lfszo.codefriend.top/get', {
-        method: 'POST', // 假设需要 POST，与之前的 sendLogsToGinAPI 一致
-        retry: 1,
-        retryDelay: 100,
-        // 如果需要发送数据：
-        // body: JSON.stringify(accessLogs),
-        // headers: { 'Content-Type': 'application/json' },
-      });
+    // 使用 Nuxt 的 $fetch 替代原生 fetch，不使用 await
+    $fetch('https://infra-webhook.lfszo.codefriend.top/get', {
+      method: 'POST',
+      retry: 1,
+      retryDelay: 100, // 单位是毫秒(ms)
+    }).then(response => {
       console.log('请求API成功，响应:', response);
-    } catch (error) {
+    }).catch(error => {
       console.error('请求API失败:', error);
-      // 可选择继续执行或抛出错误
-    }
-    
+    })
+    setTimeout(() => {
+      console.log('等待2秒后继续执行');
+    })
     return hubAnalytics().put({
       indexes: [link.id], // only one index
       blobs: logs2blobs(accessLogs),
