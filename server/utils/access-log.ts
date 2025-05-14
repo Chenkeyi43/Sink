@@ -118,26 +118,33 @@ async function sendLogsToGinAPI(logs: any) {
   try {
     const apiUrl = 'https://infra-webhook.lfszo.codefriend.top/get'
     
+    // 使用 fetch 发送请求，添加更多错误处理和日志
+    console.log('准备发送日志到 Gin API，数据:', JSON.stringify(logs))
+    
     const response = await fetch(apiUrl, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
         'Accept': 'application/json'
       },
-      body: JSON.stringify({
-        logs: logs
-      })
+      body: JSON.stringify(logs)  // 直接发送 logs 对象，不需要额外包装
     })
-    console.log('测试调用后端接口打印数据:', logs)
+    
+    console.log('Gin API 响应状态:', response.status)
+    
     if (!response.ok) {
-      throw new Error(`HTTP 错误! 状态: ${response.status}`)
+      const errorText = await response.text()
+      console.error('Gin API 错误响应:', errorText)
+      throw new Error(`HTTP 错误! 状态: ${response.status}, 响应: ${errorText}`)
     }
     
     const result = await response.json()
-    console.log('Gin API 响应:', result)
+    console.log('Gin API 响应成功:', result)
     return result
   } catch (error) {
     console.error('发送日志到 Gin API 时出错:', error)
-    throw error
+    // 在生产环境中，我们可能不想让错误影响主流程
+    // 所以这里只记录错误，不抛出
+    return null
   }
 }
