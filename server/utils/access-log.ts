@@ -97,13 +97,17 @@ export function useAccessLog(event: H3Event) {
   }
 
   if (process.env.NODE_ENV === 'production') {
+    console.log('尝试打印accessLogs:', accessLogs)
+    // 发送日志到自定义 Gin 接口
+    sendLogsToGinAPI(accessLogs).catch(error => {
+      console.error('发送日志到 Gin API 失败:', error)
+    })           
     return hubAnalytics().put({
       indexes: [link.id], // only one index
       blobs: logs2blobs(accessLogs),
     })
   }
   else {
-    console.log('尝试打印accessLogs:', accessLogs)
     console.log('access logs:', logs2blobs(accessLogs), blobs2logs(logs2blobs(accessLogs)))
     // 发送日志到自定义 Gin 接口
     sendLogsToGinAPI(accessLogs).catch(error => {
