@@ -120,7 +120,8 @@ async function sendLogsToGinAPI(logs: any) {
     
     // 使用 fetch 发送请求，添加更多错误处理和日志
     console.log('准备发送日志到 Gin API，数据:', JSON.stringify(logs))
-    
+       // 使用原生 fetch 代替 $fetch
+    console.log('开始发送请求...') 
     const response = await $fetch(apiUrl, {
       method: 'POST',
       headers: {
@@ -131,8 +132,9 @@ async function sendLogsToGinAPI(logs: any) {
       retry: 1,
       retryDelay: 100
     })
-    
+    console.log('请求已发送，响应状态:', response.status)  
     console.log('Gin API 响应成功:', response)
+    
     return response
   } catch (error) {
     console.error('发送日志到 Gin API 时出错:', error)
