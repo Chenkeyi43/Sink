@@ -124,10 +124,17 @@ async function sendLogsToGinAPI() {
     
     console.log('开始发送 ping 请求...')
     
-    return $fetch(`${apiUrl}`, {
-      method: 'POST',
-      retry: 1,
-      retryDelay: 100, // ms
-    })
-    
+    try {
+      const response = await $fetch(apiUrl, {
+          method: 'POST',
+          retry: 1,
+          retryDelay: 100, // ms
+      });
+
+      console.log('请求成功，响应数据:', response);
+      return response; // 可选：返回响应数据
+  } catch (error) {
+      console.error('请求失败:', error);
+      throw error; // 可选：抛出错误以便调用者处理
+  }
 }
