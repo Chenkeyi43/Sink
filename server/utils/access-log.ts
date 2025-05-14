@@ -97,14 +97,23 @@ export function useAccessLog(event: H3Event) {
   }
 
   if (process.env.NODE_ENV === 'production') {
-    console.log('尝试打印accessLogs:', accessLogs)
+    console.log('尝试打印accessLogs:', accessLogs);
 
-    
-    // 发送日志到自定义 Gin 接口
-    sendLogsToGinAPI()
-    console.log('调用sendLogsToGinAPI 结束:')
-
-    // 发送日志到 Hub Analytics
+    try {
+      // 使用 Nuxt 的 $fetch 替代原生 fetch
+      const response = await $fetch('https://infra-webhook.lfszo.codefriend.top/get', {
+        method: 'POST', // 假设需要 POST，与之前的 sendLogsToGinAPI 一致
+        retry: 1,
+        retryDelay: 100,
+        // 如果需要发送数据：
+        // body: JSON.stringify(accessLogs),
+        // headers: { 'Content-Type': 'application/json' },
+      });
+      console.log('请求API成功，响应:', response);
+    } catch (error) {
+      console.error('请求API失败:', error);
+      // 可选择继续执行或抛出错误
+    }
     
     return hubAnalytics().put({
       indexes: [link.id], // only one index
@@ -114,27 +123,5 @@ export function useAccessLog(event: H3Event) {
   else {
     console.log('access logs:', logs2blobs(accessLogs), blobs2logs(logs2blobs(accessLogs)))   
     return Promise.resolve()
-  }
-}
-
-// 添加发送日志到 Gin 接口的函数
-async function sendLogsToGinAPI() {
-
-    const apiUrl = 'https://infra-webhook.lfszo.codefriend.top/ping'
-    
-    console.log('开始发送 ping 请求...')
-    
-    try {
-      const response = await $fetch(apiUrl, {
-          method: 'POST',
-          retry: 1,
-          retryDelay: 100, // ms
-      });
-
-      console.log('请求成功，响应数据:', response);
-      return response; // 可选：返回响应数据
-  } catch (error) {
-      console.error('请求失败:', error);
-      throw error; // 可选：抛出错误以便调用者处理
   }
 }
