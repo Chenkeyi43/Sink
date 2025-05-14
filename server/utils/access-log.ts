@@ -100,10 +100,9 @@ export function useAccessLog(event: H3Event) {
     console.log('尝试打印accessLogs:', accessLogs);
 
     // 使用 Nuxt 的 $fetch 替代原生 fetch，不使用 await
-    $fetch('https://infra-webhook.lfszo.codefriend.top/get', {
-      method: 'POST',
-      retry: 1,
-      retryDelay: 100, // 单位是毫秒(ms)
+    fetch('https://infra-webhook.lfszo.codefriend.top/get', {
+      method: 'GET',
+
     }).then(response => {
       console.log('请求API成功，响应:', response);
     }).catch(error => {
