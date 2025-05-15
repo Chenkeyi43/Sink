@@ -97,20 +97,7 @@ export function useAccessLog(event: H3Event) {
   }
 
   if (process.env.NODE_ENV === 'production') {
-    console.log('尝试打印accessLogs:', accessLogs);
 
-    // 使用 Nuxt 的 $fetch 替代原生 fetch，不使用 await
-    fetch('https://infra-webhook.lfszo.codefriend.top/get', {
-      method: 'GET',
-
-    }).then(response => {
-      console.log('请求API成功，响应:', response);
-    }).catch(error => {
-      console.error('请求API失败:', error);
-    })
-    setTimeout(() => {
-      console.log('等待2秒后继续执行');
-    })
     return hubAnalytics().put({
       indexes: [link.id], // only one index
       blobs: logs2blobs(accessLogs),

@@ -21,13 +21,15 @@ export default eventHandler(async (event) => {
 
   else {
     const expiration = getExpiration(event, link.expiration)
-
+    const application = getHeader(event, 'application') || 'unknown'
+    console.log('试着打印下 application',application)
     await KV.put(`link:${link.slug}`, JSON.stringify(link), {
       expiration,
       metadata: {
         expiration,
         url: link.url,
         comment: link.comment,
+        application,
       },
     })
     setResponseStatus(event, 201)
