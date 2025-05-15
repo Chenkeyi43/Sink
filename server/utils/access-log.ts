@@ -81,6 +81,7 @@ export function useAccessLog(event: H3Event) {
   const accessLogs = {
     url: link.url,
     slug: link.slug,
+    application: link.application,
     ua: userAgent,
     ip,
     referer,
