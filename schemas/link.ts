@@ -6,7 +6,7 @@ const { slugRegex } = useAppConfig()
 const slugDefaultLength = +useRuntimeConfig().public.slugDefaultLength
 
 export const nanoid = (length: number = slugDefaultLength) => customAlphabet('23456789abcdefghjkmnpqrstuvwxyz', length)
-
+//  新增application 区分不同的应用
 export const LinkSchema = z.object({
   id: z.string().trim().max(26).default(nanoid(10)),
   url: z.string().trim().url().max(2048),
