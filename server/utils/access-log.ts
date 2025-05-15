@@ -96,9 +96,9 @@ export function useAccessLog(event: H3Event) {
     device: uaInfo?.device?.model,
     deviceType: uaInfo?.device?.type,
   }
-
+  
   if (process.env.NODE_ENV === 'production') {
-
+    console.log('access logs:', accessLogs)
     return hubAnalytics().put({
       indexes: [link.id], // only one index
       blobs: logs2blobs(accessLogs),
