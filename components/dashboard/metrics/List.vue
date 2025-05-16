@@ -40,7 +40,7 @@ defineProps({
             class="flex-1 leading-5 truncate font-mediums"
           >
             <DashboardMetricsName
-              :name="metric.name"
+              :name="metric.name + metric.app"
               :type="type"
             />
           </div>
