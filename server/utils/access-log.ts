@@ -34,6 +34,7 @@ export const blobsMap = {
   blob13: 'browserType',
   blob14: 'device',
   blob15: 'deviceType',
+  blob16: 'application',
 } as const
 
 export type BlobsMap = typeof blobsMap
@@ -81,7 +82,6 @@ export function useAccessLog(event: H3Event) {
   const accessLogs = {
     url: link.url,
     slug: link.slug,
-    application: link.application,
     ua: userAgent,
     ip,
     referer,
@@ -95,6 +95,7 @@ export function useAccessLog(event: H3Event) {
     browserType: uaInfo?.browser?.type,
     device: uaInfo?.device?.model,
     deviceType: uaInfo?.device?.type,
+    application: link.application,
   }
   
   if (process.env.NODE_ENV === 'production') {
