@@ -59,7 +59,7 @@ defineProps({
             v-if="type === 'slug'"
             class="flex-1 text-center"
           >
-            {{ metric.application || '未知' }}
+            {{ metric.app || '未知' }}
           </div>
           <div class="text-right">
             {{ formatNumber(metric.count) }}
