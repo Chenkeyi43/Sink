@@ -25,6 +25,7 @@ defineProps({
       </div>
 
       <div
+        v-if="type === 'slug'"
         class="h-12 px-4 font-medium text-left align-middle text-muted-foreground "
       >
         Application
@@ -43,13 +44,21 @@ defineProps({
     >
       <div class="px-4 py-2 transition-colors border-b hover:bg-muted/50">
         <div class="flex justify-between">
-          <div class="flex-1 leading-5 truncate font-mediums">
+          <div
+            :class="[
+              'leading-5 truncate font-mediums',
+              type === 'slug' ? 'flex-1' : 'flex-[2]'
+            ]"
+          >
             <DashboardMetricsName
               :name="metric.name"
               :type="type"
             />
           </div>
-          <div class="flex-1 text-center">
+          <div
+            v-if="type === 'slug'"
+            class="flex-1 text-center"
+          >
             {{ metric.application || '未知' }}
           </div>
           <div class="text-right">
