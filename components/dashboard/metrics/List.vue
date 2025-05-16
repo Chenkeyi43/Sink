@@ -23,6 +23,13 @@ defineProps({
       >
         Name
       </div>
+
+      <div
+        class="h-12 px-4 font-medium text-left align-middle text-muted-foreground "
+      >
+        Application
+      </div>
+      
       <div
         class="h-12 px-4 font-medium text-right align-middle text-muted-foreground"
       >
@@ -36,17 +43,16 @@ defineProps({
     >
       <div class="px-4 py-2 transition-colors border-b hover:bg-muted/50">
         <div class="flex justify-between">
-          <div
-            class="flex-1 leading-5 truncate font-mediums"
-          >
+          <div class="flex-1 leading-5 truncate font-mediums">
             <DashboardMetricsName
-              :name="metric.name + metric.app"
+              :name="metric.name"
               :type="type"
             />
           </div>
-          <div
-            class="text-right"
-          >
+          <div class="flex-1 text-center">
+            {{ metric.application || '未知' }}
+          </div>
+          <div class="text-right">
             {{ formatNumber(metric.count) }}
             <span class="text-xs text-gray-500">({{ metric.percent }}%)</span>
           </div>
