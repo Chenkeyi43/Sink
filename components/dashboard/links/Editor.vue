@@ -34,6 +34,7 @@ const EditLinkSchema = LinkSchema.pick({
     title: true,
     description: true,
     image: true,
+    ApplicationId: true,
   }).extend({
     expiration: z.coerce.date().optional(),
   }).optional(),
