@@ -25,17 +25,8 @@ const EditLinkSchema = LinkSchema.pick({
   url: true,
   slug: true,
 }).extend({
-  optional: LinkSchema.omit({
-    id: true,
-    url: true,
-    slug: true,
-    createdAt: true,
-    updatedAt: true,
-    title: true,
-    description: true,
-    image: true,
-    ApplicationId: true,
-  }).extend({
+  optional: z.object({
+    comment: z.string().optional(),
     expiration: z.coerce.date().optional(),
   }).optional(),
 })
