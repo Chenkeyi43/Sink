@@ -3,7 +3,7 @@ import { nanoid } from 'nanoid'
 
 export default eventHandler(async (event) => {
   // 只允许管理员创建项目组
-  const config = useRuntimeConfig()
+  const config = useRuntimeConfig(event)
   const token = getRequestHeader(event, 'authorization')?.replace('Bearer ', '')
   console.log(token,"========", config.siteToken)
   if (token !== config.siteToken)
