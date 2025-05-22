@@ -19,27 +19,20 @@ const { previewMode } = useRuntimeConfig().public
 
 async function onSubmit(form) {
   try {
-    // 先清除可能存在的旧 token
-    localStorage.removeItem('SinkSiteToken')
+    localStorage.setItem('SinkSiteToken', form.token)
+    const response = await useAPI('/api/verify')
     
-    // 验证是否为管理员 token
-    const response = await $fetch('/api/verify', {
-      headers: {
-        Authorization: `Bearer ${form.token}`
-      }
-    })
-
     // 如果不是管理员，禁止登录
     if (!response.isAdmin) {
+      localStorage.removeItem('SinkSiteToken')
       throw new Error('只有管理员可以登录后台管理界面')
     }
-
-    // 验证成功后，保存 token 并跳转
-    localStorage.setItem('SinkSiteToken', form.token)
+    
     navigateTo('/dashboard')
   }
   catch (e) {
     console.error(e)
+    localStorage.removeItem('SinkSiteToken')
     toast.error('登录失败', {
       description: e.message || '请检查您的 Token 是否正确',
     })
