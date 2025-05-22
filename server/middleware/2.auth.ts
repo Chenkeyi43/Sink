@@ -1,8 +1,10 @@
 export default eventHandler((event) => {
+  console.log('调用auth中间间')
   const token = getHeader(event, 'Authorization')?.replace('Bearer ', '')
   
   // 检查是否为管理员 Token
   if (event.path.startsWith('/api/') && !event.path.startsWith('/api/_')) {
+    console.log(token, '=======', useRuntimeConfig(event).siteToken)
     // 先检查是否为管理员 Token
     if (token === useRuntimeConfig(event).siteToken) {
       // 设置管理员标识
