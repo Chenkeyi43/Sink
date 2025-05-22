@@ -2,7 +2,7 @@ import { z } from 'zod'
 import { nanoid } from 'nanoid'
 
 export default eventHandler(async (event) => {
-  // 只允许管理员创建项目组
+  // 只允许管理员创建项目组，useRuntimeConfig(event) 请求特定 的运行时配置
   const config = useRuntimeConfig(event)
   const token = getRequestHeader(event, 'authorization')?.replace('Bearer ', '')
   console.log(token,"========", config.siteToken)

@@ -17,7 +17,7 @@ export default eventHandler(async (event) => {
     limit: z.coerce.number().max(1024).default(20),
     cursor: z.string().trim().max(1024).optional(),
   }).parse)
-  
+  console.log('获取KV')
   const list = await KV.list({
     prefix: 'project:',
     limit,
