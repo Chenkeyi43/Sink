@@ -17,18 +17,13 @@ export default eventHandler(async (event) => {
   const { cloudflare } = event.context
   const { KV } = cloudflare.env
 
-  // 检查项目名称是否已存在
-  const existingProjects = await KV.list({ prefix: 'project:' })
-  if (Array.isArray(existingProjects.keys)) {
-    for (const key of existingProjects.keys) {
-      const projectData = await KV.get(key.name, { type: 'json' })
-      if (projectData && projectData.projectName === projectName) {
-        throw createError({
-          status: 409,
-          statusText: `项目 "${projectName}" 已存在`,
-        })
-      }
-    }
+  // 直接检查项目名称是否存在
+  const existingProject = await KV.get(`project:${projectName}`)
+  if (existingProject) {
+    throw createError({
+      status: 409,
+      statusText: `项目 "${projectName}" 已存在`,
+    })
   }
   
   // 生成项目Token
@@ -41,8 +36,8 @@ export default eventHandler(async (event) => {
     createdAt: Math.floor(Date.now() / 1000),
   }
   
-  // 存储项目信息
-  await KV.put(`project:${projectToken}`, JSON.stringify(project))
+  // 使用项目名称作为存储键
+  await KV.put(`project:${projectName}`, JSON.stringify(project))
   
   // 返回项目信息（不包含 token）
   const { token: _, ...projectInfo } = project
