@@ -3,7 +3,6 @@ export default eventHandler((event) => {
   
   // 检查是否为管理员 Token
   if (event.path.startsWith('/api/') && !event.path.startsWith('/api/_')) {
-    console.log(token, '=======', useRuntimeConfig(event).siteToken)
     // 先检查是否为管理员 Token
     if (token === useRuntimeConfig(event).siteToken) {
       // 设置管理员标识
@@ -20,10 +19,9 @@ export default eventHandler((event) => {
               for (const key of projects.keys) {
                 const projectData = await cloudflare.env.KV.get(key.name, { type: 'json' })
                 if (projectData && projectData.token === token) {
-                  // 找到匹配的项目组 Token
+                  // 找到匹配的项目组 Token，修改返回的项目信息结构
                   event.context.project = {
-                    id: projectData.id,
-                    name: projectData.name,
+                    name: projectData.projectName,
                   }
                   return true
                 }
