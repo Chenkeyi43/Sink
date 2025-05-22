@@ -40,7 +40,7 @@ export default eventHandler(async (event) => {
         url: link.url,
         comment: link.comment,
         application,
-        projectName: link.projectName, // 在元数据中也添加项目ID
+        projectName: event.context.project, // 在元数据中也添加项目
       },
     })
     setResponseStatus(event, 201)
