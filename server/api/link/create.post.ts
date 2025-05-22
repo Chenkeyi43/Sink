@@ -14,14 +14,14 @@ export default eventHandler(async (event) => {
     link.slug = link.slug.toLowerCase()
   }
 
-  // 添加项目组关联
+  // 添加项目ID到链接数据中
   if (event.context.project) {
     link.projectId = event.context.project.id
   }
 
   const { cloudflare } = event.context
   const { KV } = cloudflare.env
-  const existingLink = await KV.get(`link:${link.projectId}:${link.slug}`)
+  const existingLink = await KV.get(`link:${link.slug}`)
   if (existingLink) {
     throw createError({
       status: 409, // Conflict
@@ -33,14 +33,14 @@ export default eventHandler(async (event) => {
     const expiration = getExpiration(event, link.expiration)
     const application = getHeader(event, 'application') || 'unknown'
     link.application = application
-    await KV.put(`link:${link.projectId}:${link.slug}`, JSON.stringify(link), {
+    await KV.put(`link:${link.slug}`, JSON.stringify(link), {
       expiration,
       metadata: {
         expiration,
         url: link.url,
         comment: link.comment,
         application,
-        projectId: link.projectId,
+        projectId: link.projectId, // 在元数据中也添加项目ID
       },
     })
     setResponseStatus(event, 201)

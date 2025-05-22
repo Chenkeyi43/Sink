@@ -16,28 +16,8 @@ export default eventHandler(async (event) => {
 
     let link: z.infer<typeof LinkSchema> | null = null
 
-    // 修改获取链接的方法，支持多项目组
-    const getLink = async (slugKey: string) => {
-      // 查询所有项目的链接
-      const list = await KV.list({
-        prefix: 'link:',
-      })
-      
-      // 遍历所有键，找到匹配 slug 的记录
-      if (Array.isArray(list.keys)) {
-        for (const key of list.keys) {
-          // 从键名中提取 slug
-          const parts = key.name.split(':')
-          const keySlug = parts[parts.length - 1]
-          
-          if (keySlug === slugKey) {
-            // 找到匹配的键，获取链接数据
-            return await KV.get(key.name, { type: 'json', cacheTtl: linkCacheTtl })
-          }
-        }
-      }
-      return null
-    }
+    const getLink = async (key: string) =>
+      await KV.get(`link:${key}`, { type: 'json', cacheTtl: linkCacheTtl })
 
     const lowerCaseSlug = slug.toLowerCase()
     link = await getLink(caseSensitive ? slug : lowerCaseSlug)
