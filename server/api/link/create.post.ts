@@ -16,7 +16,7 @@ export default eventHandler(async (event) => {
 
   // 添加项目ID到链接数据中
   if (event.context.project) {
-    link.projectName = event.context.projectName
+    link.projectName = event.context.project.name
   }
 
   const { cloudflare } = event.context
