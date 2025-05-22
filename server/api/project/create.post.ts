@@ -10,12 +10,26 @@ export default eventHandler(async (event) => {
   
   const body = await readBody(event)
   const { projectName, description } = await z.object({
-    name: z.string().min(1).max(50),
+    projectName: z.string().min(1).max(50),
     description: z.string().optional(),
   }).parseAsync(body)
   
   const { cloudflare } = event.context
   const { KV } = cloudflare.env
+
+  // 检查项目名称是否已存在
+  const existingProjects = await KV.list({ prefix: 'project:' })
+  if (Array.isArray(existingProjects.keys)) {
+    for (const key of existingProjects.keys) {
+      const projectData = await KV.get(key.name, { type: 'json' })
+      if (projectData && projectData.projectName === projectName) {
+        throw createError({
+          status: 409,
+          statusText: `项目 "${projectName}" 已存在`,
+        })
+      }
+    }
+  }
   
   // 生成项目Token
   const projectToken = nanoid(12)
