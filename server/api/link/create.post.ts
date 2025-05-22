@@ -16,7 +16,7 @@ export default eventHandler(async (event) => {
 
   // 添加项目ID到链接数据中
   if (event.context.project) {
-    link.projectId = event.context.project.id
+    link.projectName = event.context.projectName
   }
 
   const { cloudflare } = event.context
@@ -33,6 +33,7 @@ export default eventHandler(async (event) => {
     const expiration = getExpiration(event, link.expiration)
     const application = getHeader(event, 'application') || 'unknown'
     link.application = application
+    console.log('projectName', link.projectName)
     await KV.put(`link:${link.slug}`, JSON.stringify(link), {
       expiration,
       metadata: {
@@ -40,7 +41,7 @@ export default eventHandler(async (event) => {
         url: link.url,
         comment: link.comment,
         application,
-        projectName: event.context.project, // 在元数据中也添加项目
+        projectName: link.projectName, // 在元数据中也添加项目
       },
     })
     setResponseStatus(event, 201)
