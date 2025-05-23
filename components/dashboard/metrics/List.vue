@@ -57,7 +57,7 @@ defineProps({
           </div>
           <div
             v-if="type === 'slug'"
-            class="flex-1 text-center"
+            class="flex-1 text-right"
           >
             {{ metric.project || 'default' }}
           </div>
