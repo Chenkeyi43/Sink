@@ -7,6 +7,9 @@ export default eventHandler((event) => {
     if (token === useRuntimeConfig(event).siteToken) {
       // 设置管理员标识
       event.context.isAdmin = true
+      event.context.project = {
+        name: "default",
+      }
     } 
     // 如果不是管理员 Token，检查是否为项目组 Token
     else {
