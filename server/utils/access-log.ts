@@ -35,7 +35,7 @@ export const blobsMap = {
   blob14: 'device',
   blob15: 'deviceType',
   blob16: 'application',
-  blob17: 'project'
+  blob17: 'projectName'
 } as const
 
 export type BlobsMap = typeof blobsMap
