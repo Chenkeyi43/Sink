@@ -26,9 +26,9 @@ defineProps({
 
       <div
         v-if="type === 'slug'"
-        class="h-12 px-4 font-medium text-left align-middle text-muted-foreground "
+        class="h-12 px-4 font-medium text-center align-middle text-muted-foreground "
       >
-        project
+        Project
       </div>
       
       <div
@@ -57,7 +57,7 @@ defineProps({
           </div>
           <div
             v-if="type === 'slug'"
-            class="flex-1 text-right"
+            class="flex-1 text-center"
           >
             {{ metric.project || 'default' }}
           </div>
