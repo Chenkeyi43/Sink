@@ -34,6 +34,8 @@ export default eventHandler(async (event) => {
     const application = getHeader(event, 'application') || 'unknown'
     link.application = application
     console.log('projectName', link.projectName)
+    link.projectName = event.context.project.name
+    console.log('event.context.project.name', event.context.project.name)
     await KV.put(`link:${link.slug}`, JSON.stringify(link), {
       expiration,
       metadata: {

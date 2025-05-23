@@ -80,6 +80,7 @@ export function useAccessLog(event: H3Event) {
 
   const regionNames = new Intl.DisplayNames(['en'], { type: 'region' })
   const countryName = regionNames.of(cf?.country || 'WD') // fallback to "Worldwide"
+  console.log('link',link)
   const accessLogs = {
     url: link.url,
     slug: link.slug,
