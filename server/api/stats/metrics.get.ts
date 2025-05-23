@@ -14,9 +14,7 @@ function query2sql(query: z.infer<typeof MetricsQuerySchema>, event: H3Event): s
 
   // @ts-expect-error todo
   const sql = select(`${logsMap[query.type]} as name, blob17 as project, SUM(_sample_interval) as count`).from(dataset).where(filter).groupBy('name','project').orderBy('count DESC').limit(query.limit)
-  if (query.type === 'slug'){
-    console.log('打印下查询slug SQL',sql.toString())
-  }
+
   appendTimeFilter(sql, query)
   return sql.toString()
 }
