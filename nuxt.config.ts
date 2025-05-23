@@ -15,7 +15,8 @@ export default defineNuxtConfig({
   },
 
   runtimeConfig: {
-    siteToken: 'SinkCool',
+    siteToken: 'SinkCool',  // 管理员 Token
+    projectTokens: {},      // 项目组 Token 配置，可通过环境变量注入
     redirectStatusCode: '301',
     linkCacheTtl: 60,
     redirectWithQuery: false,

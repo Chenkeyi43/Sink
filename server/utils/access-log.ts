@@ -35,6 +35,7 @@ export const blobsMap = {
   blob14: 'device',
   blob15: 'deviceType',
   blob16: 'application',
+  blob17: 'projectName'
 } as const
 
 export type BlobsMap = typeof blobsMap
@@ -79,6 +80,7 @@ export function useAccessLog(event: H3Event) {
 
   const regionNames = new Intl.DisplayNames(['en'], { type: 'region' })
   const countryName = regionNames.of(cf?.country || 'WD') // fallback to "Worldwide"
+  console.log('link',link)
   const accessLogs = {
     url: link.url,
     slug: link.slug,
@@ -96,6 +98,7 @@ export function useAccessLog(event: H3Event) {
     device: uaInfo?.device?.model,
     deviceType: uaInfo?.device?.type,
     application: link.application,
+    projectName: link.projectName,
   }
   
   if (process.env.NODE_ENV === 'production') {

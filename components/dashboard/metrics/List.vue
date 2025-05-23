@@ -26,9 +26,9 @@ defineProps({
 
       <div
         v-if="type === 'slug'"
-        class="h-12 px-4 font-medium text-left align-middle text-muted-foreground "
+        class="h-12 px-4 font-medium text-center align-middle text-muted-foreground "
       >
-        Application
+        Project
       </div>
       
       <div
@@ -59,7 +59,7 @@ defineProps({
             v-if="type === 'slug'"
             class="flex-1 text-center"
           >
-            {{ metric.app || '未知' }}
+            {{ metric.project || 'default' }}
           </div>
           <div class="text-right">
             {{ formatNumber(metric.count) }}
