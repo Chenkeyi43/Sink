@@ -98,7 +98,7 @@ export function useAccessLog(event: H3Event) {
     device: uaInfo?.device?.model,
     deviceType: uaInfo?.device?.type,
     application: link.application,
-    project: link.projectName,
+    projectName: link.projectName,
   }
   
   if (process.env.NODE_ENV === 'production') {
