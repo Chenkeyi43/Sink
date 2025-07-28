@@ -130,3 +130,12 @@ We welcome your contributions and PRs.
 
 1. [Follow Me on X(Twitter)](https://404.li/kai).
 2. [Become a sponsor to on GitHub](https://github.com/sponsors/ccbikai).
+
+## 本地开发流程
+1. 拉取项目
+2. nuxt.config.ts 中将nitro下的openai 配置为false
+3. 复制.env.example 为 .env
+4. 配置.env文件中的变量
+5. 注释 access-log.ts 的  Modules,  // 本地开发时注释掉
+6. 运行 npm run build
+7. 运行 npm run preview
